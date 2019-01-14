@@ -1,4 +1,4 @@
-// Write a program to print a horizontal histogram of 
+// Write a program to print a vertical histogram of 
 // the lengths of words in its input
 
 #include <stdio.h>
@@ -7,8 +7,8 @@
 #define OUT 0 // outside a word
 
 int main() {
-	int c, length, i, j, state;
-	length = 0;
+	int c, length, i, j, state, maxLength;
+	length = maxLength = 0;
 
 	// initialize an array of ints with length 10
 	int wordLengths[10];
@@ -22,6 +22,9 @@ int main() {
 	while ((c = getchar()) != EOF) {
 		if ((c == ' ') || (c == '\n') || (c == '\t')) {
 			state = OUT;
+			if (length > maxLength) {
+				maxLength = length;
+			}
 			wordLengths[length]++;
 			length = 0;
 		} else if (state == OUT) {
@@ -33,11 +36,18 @@ int main() {
 	}
 
 	// prints the histogram
-	for (i = 0; i < 10; ++i) {
-		printf("%d: ", i);
-		for (j = 0; j < wordLengths[i]; ++j) {
-			printf(" x ");
+	// could improve magic number 10 here
+	for (i = maxLength; i > 0; --i) {
+		for (j = 0; j < 10; ++j) {
+			if( i <= wordLengths[j]) {
+				printf(" * ");
+			} else {
+				printf("   ");
+			}
 		}
-		printf("\n");
+		putchar('\n');
 	}
+	for (i = 0; i < 10; ++i) {
+		printf(" %d ", i);
+	} 
 }
